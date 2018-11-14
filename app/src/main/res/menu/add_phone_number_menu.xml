@@ -3,9 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group>
         <item
+            android:id="@+id/count_contact"
+            android:title="0"
+            app:showAsAction="ifRoom"/>
+        <item
             android:id="@+id/add_all_number"
-            android:title="@string/add_number"
-            android:icon="@drawable/ic_check"
+            android:title="@string/ok"
             android:visible="false"
             app:showAsAction="ifRoom"/>
     </group>

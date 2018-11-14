@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,12 +62,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView contactName;
         public TextView contactNumber;
+        public ImageView contactAddTick;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             contactName = itemView.findViewById(R.id.contact_name);
             contactNumber = itemView.findViewById(R.id.contact_number);
-
+            contactAddTick = itemView.findViewById(R.id.contact_add_tick);
         }
 
         public void bind(final ContactItem item, final OnItemClickListener listener) {
@@ -76,12 +78,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    itemView.findViewById(R.id.contact_add_tick).setVisibility(View.GONE);
                     listener.onItemClick(item);
                 }
             });
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
+                    itemView.findViewById(R.id.contact_add_tick).setVisibility(View.VISIBLE);
                     listener.onItemLongClick(item);
                     return true;
                 }

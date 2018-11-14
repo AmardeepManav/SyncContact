@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">contDemo</string>
     <string name="add_number">Add Number</string>
+    <string name="demo">DEMO</string>
+    <string name="ok">Ok</string>
 </resources>

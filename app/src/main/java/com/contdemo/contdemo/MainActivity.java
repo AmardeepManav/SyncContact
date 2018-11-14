@@ -6,17 +6,25 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+
     private static final int CONTACT_PERMISSION_CODE = 201;
+    public static final int CONTACT_REQUEST_CODE = 321;
     private Button getContactBtn;
+    private TextView mainContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
             requestStoragePermission();
         }
         getContactBtn = findViewById(R.id.get_contact_btn);
+        mainContact = findViewById(R.id.main_contact);
         getContactBtn.setOnClickListener(onClickListener);
     }
 
@@ -81,8 +90,31 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if (view.getId() == R.id.get_contact_btn) {
-                startActivity(new Intent(getApplicationContext(), ContactActivity.class));
+                //startActivity(new Intent(getApplicationContext(), ContactActivity.class));
+
+                Intent intent = new Intent(getApplicationContext(), ContactActivity.class);
+                startActivityForResult(intent, CONTACT_REQUEST_CODE);
             }
         }
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_CANCELED) {
+            Toast.makeText(getApplicationContext(), "something wrong...", Toast.LENGTH_SHORT).show();
+        } else if (requestCode == CONTACT_REQUEST_CODE) {
+            List<String> list = new ArrayList<>();
+            StringBuffer buffer = new StringBuffer();
+
+            list = data.getStringArrayListExtra(ContactActivity.EXTRA_NUMBER_LIST);
+            Toast.makeText(getApplicationContext(), "OK..."+ list.size(), Toast.LENGTH_SHORT).show();
+            for (int i = 0; i< list.size(); i++) {
+                buffer.append(list.get(i));
+            }
+           // if()
+            mainContact.setText(buffer.toString());
+        }
+    }
 }
