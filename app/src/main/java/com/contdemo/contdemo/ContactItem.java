@@ -1,34 +1,29 @@
 package com.contdemo.contdemo;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+public class ContactItem {
 
-public class ContactItem implements Parcelable {
-
+    private int itemId;
     private String contactName;
     private String contactNumber;
+
+//    public ContactItem(int itemId, String contactName, String contactNumber) {
+//        this.itemId = itemId;
+//        this.contactName = contactName;
+//        this.contactNumber = contactNumber;
+//    }
 
     public ContactItem(String contactName, String contactNumber) {
         this.contactName = contactName;
         this.contactNumber = contactNumber;
     }
 
-    protected ContactItem(Parcel in) {
-        contactName = in.readString();
-        contactNumber = in.readString();
+    public int getItemId() {
+        return itemId;
     }
 
-    public static final Creator<ContactItem> CREATOR = new Creator<ContactItem>() {
-        @Override
-        public ContactItem createFromParcel(Parcel in) {
-            return new ContactItem(in);
-        }
-
-        @Override
-        public ContactItem[] newArray(int size) {
-            return new ContactItem[size];
-        }
-    };
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
+    }
 
     public String getContactName() {
         return contactName;
@@ -46,14 +41,4 @@ public class ContactItem implements Parcelable {
         this.contactNumber = contactNumber;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(contactName);
-        parcel.writeString(contactNumber);
-    }
 }
