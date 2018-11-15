@@ -6,11 +6,15 @@ public class ContactItem {
     private String contactName;
     private String contactNumber;
 
-//    public ContactItem(int itemId, String contactName, String contactNumber) {
-//        this.itemId = itemId;
-//        this.contactName = contactName;
-//        this.contactNumber = contactNumber;
-//    }
+    private boolean isSelected = false;
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
 
     public ContactItem(String contactName, String contactNumber) {
         this.contactName = contactName;

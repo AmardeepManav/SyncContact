@@ -8,18 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
     public interface OnItemClickListener {
-        void onItemClick(ContactItem item);
-        void onItemLongClick (ContactItem item);
+        void onItemClick(int item, View itemView);
+        void onItemLongClick(int item, View itemView);
     }
 
+    private final List<SelectableItem> mValues;
     private List<ContactItem> items;
     private final OnItemClickListener listener;
     private Context context;
@@ -28,6 +30,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         this.items = items;
         this.listener = listener;
         this.context = context;
+
+        mValues = new ArrayList<>();
+        for (ContactItem item : items) {
+            mValues.add(new SelectableItem(item, false));
+        }
     }
 
     @NonNull
@@ -40,18 +47,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int position) {
-        viewHolder.bind(items.get(position), listener);
-
-//        viewHolder.contactName.setText(items.get(position).getContactName());
-//        viewHolder.contactNumber.setText(items.get(position).getContactNumber());
-//        viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//                ContactItem contactItem = items.get(position);
-//                Toast.makeText(context, contactItem.getContactName(), Toast.LENGTH_SHORT).show();
-//                return false;
-//            }
-//        });
+      //  viewHolder.bind(items.get(position), listener);
+        viewHolder.bind(position, listener);
+        SelectableItem selectableItem = mValues.get(position);
+        viewHolder.mItem = selectableItem;
+        viewHolder.setChecked(viewHolder.mItem.isSelected());
     }
 
     @Override
@@ -63,33 +63,48 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         public TextView contactName;
         public TextView contactNumber;
         public ImageView contactAddTick;
+        public RelativeLayout layout;
+
+        private SelectableItem mItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             contactName = itemView.findViewById(R.id.contact_name);
             contactNumber = itemView.findViewById(R.id.contact_number);
             contactAddTick = itemView.findViewById(R.id.contact_add_tick);
+            layout = itemView.findViewById(R.id.contact_item_layout);
         }
 
-        public void bind(final ContactItem item, final OnItemClickListener listener) {
-            contactName.setText(item.getContactName());
-            contactNumber.setText(item.getContactNumber());
-          //  Picasso.with(itemView.getContext()).load(item.imageUrl).into(image);
+        public void bind(final int position, final OnItemClickListener listener) {
+            contactName.setText(items.get(position).getContactName());
+            contactNumber.setText(items.get(position).getContactNumber());
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    itemView.findViewById(R.id.contact_add_tick).setVisibility(View.GONE);
-                    listener.onItemClick(item);
+                    if (mItem.isSelected()) {
+                        setChecked(false);
+                    } else {
+                        setChecked(true);
+                    }
+                    listener.onItemClick(position, itemView);
                 }
             });
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    itemView.findViewById(R.id.contact_add_tick).setVisibility(View.VISIBLE);
-                    listener.onItemLongClick(item);
+                    listener.onItemLongClick(position, itemView);
                     return true;
                 }
             });
+        }
+
+        public void setChecked(boolean value) {
+            if (value) {
+                layout.setBackgroundColor(Color.LTGRAY);
+            } else {
+                layout.setBackground(null);
+            }
+            mItem.setSelected(value);
         }
     }
 }
