@@ -1,12 +1,14 @@
 package com.contdemo.contdemo;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         getContactBtn = findViewById(R.id.get_contact_btn);
         mainContact = findViewById(R.id.main_contact);
         getContactBtn.setOnClickListener(onClickListener);
+        showDilaog();
     }
 
     private void contactPermission () {
@@ -114,5 +117,26 @@ public class MainActivity extends AppCompatActivity {
            // if()
             mainContact.setText(buffer.toString());
         }
+    }
+
+    private void showDilaog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(getApplicationContext());
+        dialog.setTitle("");
+        dialog.setMessage("please add the cntact Permission");
+        dialog.setPositiveButton("Ok",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                })
+        .setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+         dialog.create();
     }
 }
